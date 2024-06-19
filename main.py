@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, WebSocket, UploadFile
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -6,6 +6,14 @@ app = FastAPI()
 
 class ReceivedMsg(BaseModel):
     text: str | None = None
+
+
+@app.websocket("/ws")
+async def ws_endpoint(ws: WebSocket):
+    await ws.accept()
+    while True:
+        data = await ws.receive_text()
+        await ws.send_text(f"Message was: {data}")
 
 
 @app.get('/')
