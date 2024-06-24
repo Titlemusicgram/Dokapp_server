@@ -14,7 +14,7 @@ app.mount('/dokap_temp', StaticFiles(directory='dokapp_temp'), name='dokapp_temp
 # Создаем список, где будут храниться фотографии, которые на данный момент не забрал с сервера Dockapp_desktop
 list_of_photos_to_send = []
 
-object_name = 'qwerty'
+object_name = '123 qwerty'
 
 
 def delete_bad_symbols_and_shorten(received_object_name):
