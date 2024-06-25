@@ -37,6 +37,7 @@ def get_gps_coords(temp_filename):
         if "GPS GPSLatitude" in meta_data.keys():
             latitude = meta_data['GPS GPSLatitude'].values
             longitude = meta_data['GPS GPSLongitude'].values
+            creation_date = meta_data['EXIF DateTimeOriginal'].values.split(' ')[1].replace(':', "_")[:5]
             if str(latitude[2]) == '0/0' or str(longitude[2]) == '0/0':
                 pass
             elif int(latitude[0]) == 0 or int(longitude[0]) == 0:
@@ -45,4 +46,4 @@ def get_gps_coords(temp_filename):
                 uni_coordinates = (f'{latitude[0]} {latitude[1]}m {float(latitude[2])}s N 'f'{longitude[0]} '
                                    f'{longitude[1]}m {float(longitude[2])}s E')
                 rounded_deci_coordinates = convert_coord(uni_coordinates)
-        return rounded_deci_coordinates
+        return rounded_deci_coordinates, creation_date

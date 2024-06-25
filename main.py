@@ -44,11 +44,10 @@ async def post_photo(file: UploadFile):
     temp_filename = file.filename[:10]
     with open(f"dokapp_temp/{temp_filename}", "wb+") as image:
         shutil.copyfileobj(file.file, image)
-    gps_coords = get_gps_coords(temp_filename)
+    gps_coords, creation_date = get_gps_coords(temp_filename)
     global object_name
-    photo_obj = Photo(object_name, gps_coords)
+    photo_obj = Photo(object_name, creation_date, gps_coords)
     list_of_photos_to_send.append(photo_obj)
     os.replace(f"dokapp_temp/{temp_filename}", photo_obj.path)
-    print(list_of_photos_to_send)
     print('Just got a photo')
     return 'got a photo!'
