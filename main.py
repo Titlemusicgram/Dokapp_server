@@ -1,9 +1,9 @@
 import os
 import shutil
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from funcs import delete_bad_symbols_and_shorten, get_gps_coords
+from funcs import delete_bad_symbols_and_shorten, get_gps_coords, zip_files
 from Photo_class import Photo
 
 app = FastAPI()
@@ -28,7 +28,12 @@ async def get_root():
 
 @app.get('/get_all_photos')
 async def get_all_photos():
-    return 'In process...'
+    zip_buffer = zip_files(list_of_photos_to_send)
+
+    # Grab ZIP file from in-memory, make response with correct MIME-type
+    resp = Response(zip_buffer.getvalue(), media_type="application/x-zip-compressed",
+                    headers={'Content-Disposition': f'attachment;filename=archive.zip'})
+    return resp
 
 
 @app.post('/')

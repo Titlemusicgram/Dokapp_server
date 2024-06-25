@@ -3,6 +3,16 @@ import re
 from geopy.point import Point
 import exifread
 from config import photo_title_lenght
+import zipfile
+import io
+
+
+def zip_files(list_of_photos_to_send):
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w") as zf:
+        for photo_object in list_of_photos_to_send:
+            zf.write(photo_object.path)
+    return zip_buffer
 
 
 def delete_bad_symbols_and_shorten(received_object_name):
