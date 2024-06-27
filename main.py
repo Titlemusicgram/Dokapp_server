@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from funcs import delete_bad_symbols_and_shorten, get_gps_coords, zip_files, clean_temp_dir, create_temp_folder
 from Photo_class import Photo
+from config import dokapp_temp
 
 
 # Создаем временную папку, если ее нет
@@ -14,10 +15,10 @@ create_temp_folder()
 app = FastAPI()
 
 # Создаем папку, где будут храниться фото
-app.mount('/dokapp_temp', StaticFiles(directory='dokapp_temp'), name='dokapp_temp')
+app.mount(f'/{dokapp_temp}', StaticFiles(directory=f'{dokapp_temp}'), name=f'{dokapp_temp}')
 
 # Удаляем все временные фото в dokapp_temp при запуске
-clean_temp_dir('dokapp_temp')
+clean_temp_dir(dokapp_temp)
 
 # Создаем список, где будут храниться фотографии, которые на данный момент не забрал с сервера Dockapp_desktop
 list_of_photos_to_send = []
@@ -59,13 +60,13 @@ async def post_root(msg: ReceivedMsg):
 async def post_photo(file: UploadFile):
     global list_of_photos_to_send
     temp_filename = file.filename[:10]
-    with open(f"dokapp_temp/{temp_filename}", "wb+") as image:
+    with open(f"{dokapp_temp}/{temp_filename}", "wb+") as image:
         shutil.copyfileobj(file.file, image)
     gps_coords, image_creation_date = get_gps_coords(temp_filename)
     global object_name
     photo_obj = Photo(object_name, image_creation_date, gps_coords)
     list_of_photos_to_send.append(photo_obj)
-    os.replace(f"dokapp_temp/{temp_filename}", photo_obj.path)
+    os.replace(f"{dokapp_temp}/{temp_filename}", photo_obj.path)
     print('Just got a photo')
     print(list_of_photos_to_send)
     return 'got a photo!'

@@ -3,14 +3,14 @@ import os
 import re
 from geopy.point import Point
 import exifread
-from config import photo_title_lenght
+from config import photo_title_lenght, dokapp_temp
 import zipfile
 import io
 
 
 def create_temp_folder():
-    if not os.path.isdir('dokapp_temp'):
-        os.mkdir('dokapp_temp')
+    if not os.path.isdir(dokapp_temp):
+        os.mkdir(dokapp_temp)
 
 
 def clean_temp_dir(folder_to_clean):
@@ -20,7 +20,7 @@ def clean_temp_dir(folder_to_clean):
 
 def zip_files(list_of_photos: list):
     zip_buffer = io.BytesIO()
-    os.chdir('dokapp_temp')
+    os.chdir(dokapp_temp)
     with zipfile.ZipFile(zip_buffer, "w") as zf:
         for photo_object in list_of_photos:
             zf.write(photo_object.image_name)
@@ -39,7 +39,7 @@ def delete_bad_symbols_and_shorten(received_object_name):
 
 
 def check_the_photo(photo_id, name, number_to_check):
-    if len(glob.glob(f'dokapp_temp/{photo_id} {name} {number_to_check} *')) != 0:
+    if len(glob.glob(f'{dokapp_temp}/{photo_id} {name} {number_to_check} *')) != 0:
         number_to_check += 1
     else:
         number_to_check = 1
@@ -56,7 +56,7 @@ def convert_coord(uni_coordinates):
 
 
 def get_gps_coords(temp_filename):
-    with open(f"dokapp_temp/{temp_filename}", 'rb') as image_file:
+    with open(f"{dokapp_temp}/{temp_filename}", 'rb') as image_file:
         meta_data = exifread.process_file(image_file)
         if "GPS GPSLatitude" in meta_data.keys():
             latitude = meta_data['GPS GPSLatitude'].values

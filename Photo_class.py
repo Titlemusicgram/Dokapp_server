@@ -1,4 +1,4 @@
-from funcs import check_the_photo
+from funcs import check_the_photo, dokapp_temp
 
 
 class Photo:
@@ -19,4 +19,4 @@ class Photo:
         self.number_of_photo = Photo.number_of_photo
         self.image_name = (f"{self.global_id} {self.object_name} {self.number_of_photo} {self.image_creation_date} "
                            f"{self.gps}.jpg")
-        self.path = f"dokapp_temp/{self.image_name}"
+        self.path = f"{dokapp_temp}/{self.image_name}"
