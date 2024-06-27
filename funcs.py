@@ -8,6 +8,11 @@ import zipfile
 import io
 
 
+def create_temp_folder():
+    if not os.path.isdir('dokapp_temp'):
+        os.mkdir('dokapp_temp')
+
+
 def clean_temp_dir(folder_to_clean):
     for f in os.listdir(folder_to_clean):
         os.remove(os.path.join(folder_to_clean, f))

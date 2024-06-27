@@ -3,9 +3,14 @@ import shutil
 from fastapi import FastAPI, UploadFile, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from funcs import delete_bad_symbols_and_shorten, get_gps_coords, zip_files, clean_temp_dir
+from funcs import delete_bad_symbols_and_shorten, get_gps_coords, zip_files, clean_temp_dir, create_temp_folder
 from Photo_class import Photo
 
+
+# Создаем временную папку, если ее нет
+create_temp_folder()
+
+# Запускаем сервер
 app = FastAPI()
 
 # Создаем папку, где будут храниться фото
