@@ -1,4 +1,12 @@
 /venv/
+venv
+/venv
+venv/
+/.venv/
+.venv
+/.venv
+.venv/
+
 .idea/
 .idea
 /.idea/
