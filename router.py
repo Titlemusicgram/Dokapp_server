@@ -29,8 +29,12 @@ async def get_root():
 @router.get('/get_all_photos')
 async def get_all_photos():
     global list_of_photos_to_send
-    zip_buffer = zip_files(list_of_photos_to_send)
-    list_of_photos_to_send = []
+    if list_of_photos_to_send:
+        file_to_send = [list_of_photos_to_send.pop(0)]
+    else:
+        file_to_send = []
+    zip_buffer = zip_files(file_to_send)
+    # list_of_photos_to_send = []
 
     # Grab ZIP file from in-memory, make response with correct MIME-type
     resp = Response(zip_buffer.getvalue(), media_type="application/x-zip-compressed",
