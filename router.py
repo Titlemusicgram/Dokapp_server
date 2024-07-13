@@ -45,7 +45,11 @@ async def get_all_photos():
 @router.post('/')
 async def post_root(msg: ReceivedMsg):
     global object_name
-    object_name = delete_bad_symbols_and_shorten(msg.text)
+    try:
+        if type(msg.text.split(' ', maxsplit=1)[1]) == str and msg.text.split(' ', maxsplit=1)[0].isdigit():
+            object_name = delete_bad_symbols_and_shorten(msg.text)
+    except IndexError:
+        print("Неверный формат названия объекта")
     print(object_name)
     return 'Got a text!'
 
