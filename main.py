@@ -22,8 +22,3 @@ app.mount(f'/{dokapp_temp}', StaticFiles(directory=f'{dokapp_temp}'), name=f'{do
 clean_temp_dir(dokapp_temp)
 
 app.include_router(main_router)
-
-Base.metadata.create_all(engine)
-
-# new_worker = Worker(name="Ivan")
-# add_object_to_db(new_worker)
