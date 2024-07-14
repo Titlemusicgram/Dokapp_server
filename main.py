@@ -25,5 +25,5 @@ app.include_router(main_router)
 
 Base.metadata.create_all(engine)
 
-new_worker = Worker(name="Ivan")
-add_object_to_db(new_worker)
+# new_worker = Worker(name="Ivan")
+# add_object_to_db(new_worker)
