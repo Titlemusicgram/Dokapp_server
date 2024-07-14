@@ -3,10 +3,6 @@ from fastapi.staticfiles import StaticFiles
 from funcs import clean_temp_dir, create_temp_folder
 from config import dokapp_temp
 from router import router as main_router
-from queries import add_object_to_db
-
-from models import Worker
-from database import Base, engine
 
 
 # Создаем временную папку, если ее нет
