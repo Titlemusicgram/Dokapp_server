@@ -15,7 +15,7 @@ class Photo:
         self.object_name = photo_name.split(' ', maxsplit=1)[1]
         self.gps = gps_coords
         self.image_creation_date = image_creation_date
-        Photo.number_of_photo = check_the_photo(self.global_id, self.object_name, Photo.number_of_photo)
+        Photo.number_of_photo = check_the_photo(self.global_id, self.object_name)
         self.number_of_photo = Photo.number_of_photo
         self.image_name = (f"{self.global_id} {self.object_name} {self.number_of_photo} {self.image_creation_date} "
                            f"{self.gps}.jpg")

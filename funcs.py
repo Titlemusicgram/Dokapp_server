@@ -1,4 +1,4 @@
-import glob
+# import glob
 import os
 import re
 from geopy.point import Point
@@ -8,14 +8,13 @@ import zipfile
 import io
 
 
+# Создаем список, где будут храниться все полученные фото
+list_of_all_received_photos = []
+
+
 def create_temp_folder():
     if not os.path.isdir(dokapp_temp):
         os.mkdir(dokapp_temp)
-
-
-def clean_temp_dir(folder_to_clean):
-    for f in os.listdir(folder_to_clean):
-        os.remove(os.path.join(folder_to_clean, f))
 
 
 def zip_files(list_of_photos: list):
@@ -38,12 +37,22 @@ def delete_bad_symbols_and_shorten(received_object_name):
     return received_object_name
 
 
-def check_the_photo(photo_id, name, number_to_check):
-    if len(glob.glob(f'{dokapp_temp}/{photo_id} {name} {number_to_check} *')) != 0:
-        number_to_check += 1
-    else:
-        number_to_check = 1
-    return number_to_check
+# def check_the_photo(photo_id, name, number_to_check):
+#     if len(glob.glob(f'{dokapp_temp}/{photo_id} {name} {number_to_check} *')) != 0:
+#         number_to_check += 1
+#     else:
+#         number_to_check = 1
+#     return number_to_check
+
+
+def check_the_photo(photo_id, name):
+    global list_of_all_received_photos
+    count_of_existing_names = 0
+    for image_name in list_of_all_received_photos:
+        if f'{photo_id} {name}' == image_name:
+            count_of_existing_names += 1
+    correct_number = count_of_existing_names + 1
+    return correct_number
 
 
 def convert_coord(uni_coordinates):
@@ -55,13 +64,16 @@ def convert_coord(uni_coordinates):
     return rounded_deci_coordinates
 
 
-def get_gps_coords(temp_filename):
+def get_gps_coords_and_creation_data(temp_filename):
     with open(f"{dokapp_temp}/{temp_filename}", 'rb') as image_file:
         meta_data = exifread.process_file(image_file)
+        if "EXIF DateTimeOriginal" in meta_data.keys():
+            image_creation_date = meta_data['EXIF DateTimeOriginal'].values.split(' ')[1].replace(':', "_")[:5]
+        else:
+            image_creation_date = ''
         if "GPS GPSLatitude" in meta_data.keys():
             latitude = meta_data['GPS GPSLatitude'].values
             longitude = meta_data['GPS GPSLongitude'].values
-            image_creation_date = meta_data['EXIF DateTimeOriginal'].values.split(' ')[1].replace(':', "_")[:5]
             if str(latitude[2]) == '0/0' or str(longitude[2]) == '0/0':
                 pass
             elif int(latitude[0]) == 0 or int(longitude[0]) == 0:
@@ -70,4 +82,6 @@ def get_gps_coords(temp_filename):
                 uni_coordinates = (f'{latitude[0]} {latitude[1]}m {float(latitude[2])}s N 'f'{longitude[0]} '
                                    f'{longitude[1]}m {float(longitude[2])}s E')
                 rounded_deci_coordinates = convert_coord(uni_coordinates)
+        else:
+            rounded_deci_coordinates = ''
         return rounded_deci_coordinates, image_creation_date
